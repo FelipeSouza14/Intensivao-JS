@@ -21,7 +21,7 @@ export function inicializarCarrinho(){
 export function adicionarAoCarrinho(idProduto){
     // p pode ser qualquer produto, é só uma forma de representar
     const produto = catalogo.find((p) => p.id === idProduto );
-    const containerProdutoCarrinho = document.getElementById("produto-carrinho");
+    const containerProdutoCarrinho = document.getElementById("produtos-carrinho");
     const cartaoProdutoCarrinho = `
 <article class="flex bg-slate-100 rounded-lg p-1 relative">
     <button id="fechar-carrinho" class="absolute top-0 right-2">
