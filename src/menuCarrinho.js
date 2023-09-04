@@ -1,5 +1,8 @@
 import { catalogo } from "./utilidade";
 
+
+const idsProdutoCarrinhoComQuantidade = {};
+
 function abrirCarrinho(){
     document.getElementById("carrinho").classList.remove("right-[-360px]");
     document.getElementById("carrinho").classList.add("right-[0px]");
@@ -18,23 +21,63 @@ export function inicializarCarrinho(){
     botaoAbrirCarrinho.addEventListener("click", abrirCarrinho);
 }
 
+function incrementarQuantidadeProduto(idProduto) {
+    idsProdutoCarrinhoComQuantidade[idProduto]++;
+    atualizarInformacaoQuantidade(idProduto);
+}
+
+function decrementarQuantidadeProduto(idProduto) {
+    idsProdutoCarrinhoComQuantidade[idProduto]--;
+    atualizarInformacaoQuantidade(idProduto);
+}
+
+function atualizarInformacaoQuantidade(idProduto) {
+    document.getElementById(`quantidade-${idProduto}`).innerText = idsProdutoCarrinhoComQuantidade[idProduto];
+}
+
 export function adicionarAoCarrinho(idProduto){
     // p pode ser qualquer produto, é só uma forma de representar
+    if (idProduto in idsProdutoCarrinhoComQuantidade) {
+        incrementarQuantidadeProduto(idProduto);
+        return;
+    }
+
+    idsProdutoCarrinhoComQuantidade[idProduto] = 1;
     const produto = catalogo.find((p) => p.id === idProduto );
     const containerProdutoCarrinho = document.getElementById("produtos-carrinho");
+
+    const elementoArticle = document.createElement("article"); //<article></article>
+    const articleClasses = [
+        "flex", 
+        "bg-slate-100", 
+        "rounded-lg", 
+        "p-1", 
+        "relative"];
+
+    for (const articleClass of articleClasses) {
+        elementoArticle.classList.add(articleClass);
+    }
+
     const cartaoProdutoCarrinho = `
-<article class="flex bg-slate-100 rounded-lg p-1 relative">
     <button id="fechar-carrinho" class="absolute top-0 right-2">
         <i class="fa-solid fa-circle-xmark text-slate-500 hover:text-slate-800">
         </i></button>
     <img src="./assets/img/${produto.imagem}" alt="Carrinho: ${produto.nome}" class="h-24">
-    <div class="py-2">
+    <div class="p-2 flex flex-col justify-between">
         <p class="text-slate-900">${produto.nome}</p>
         <p class="text-slate-400">Tamanho: M</p>
         <p class="text-green-400">$${produto.preco}</p>
     </div>
-</article>`;
+    <div class="flex text-slate-950 items-end absolute bottom-0 right-2 text-lg">
+        <button id="decrementar-produto-${produto.id}">-</button>
+        <p id="quantidade-${produto.id}" class="ml-2">${idsProdutoCarrinhoComQuantidade[produto.id]}</p>
+        <button id="incrementar-produto-${produto.id}" class="ml-2">+</button>
+    </div>`;
 
-containerProdutoCarrinho.innerHTML += cartaoProdutoCarrinho;
+    elementoArticle.innerHTML += cartaoProdutoCarrinho;
+    containerProdutoCarrinho.appendChild(elementoArticle);
+
+    document.getElementById(`incrementar-produto-${produto.id}`).addEventListener("click", () => incrementarQuantidadeProduto(produto.id));
+    document.getElementById(`decrementar-produto-${produto.id}`).addEventListener("click", () => decrementarQuantidadeProduto(produto.id));
 
 }
