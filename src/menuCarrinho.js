@@ -46,7 +46,7 @@ function atualizarInformacaoQuantidade(idProduto) {
 }
 
 function desenharProdutoNoCarrinho(idProduto) {
-    const produto = catalogo.find((p) => p.id === idProduto );
+    const produto = catalogo.find((p) => p.id === idProduto);
     const containerProdutoCarrinho = document.getElementById("produtos-carrinho");
 
     const elementoArticle = document.createElement("article"); //<article></article>
@@ -77,7 +77,7 @@ function desenharProdutoNoCarrinho(idProduto) {
         <button id="incrementar-produto-${produto.id}" class="ml-2">+</button>
     </div>`;
 
-    elementoArticle.innerHTML += cartaoProdutoCarrinho;
+    elementoArticle.innerHTML = cartaoProdutoCarrinho;
     containerProdutoCarrinho.appendChild(elementoArticle);
 
     document
