@@ -97,7 +97,7 @@ function renderizarProdutosCarrinho() {
     const containerProdutoCarrinho = document.getElementById("produtos-carrinho");
     containerProdutoCarrinho.innerHTML = "";
     
-    for (const idProduto of idsProdutoCarrinhoComQuantidade) {
+    for (const idProduto in idsProdutoCarrinhoComQuantidade) {
         desenharProdutoNoCarrinho(idProduto);
     }
 }
